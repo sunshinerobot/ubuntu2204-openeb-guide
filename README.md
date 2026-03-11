@@ -189,7 +189,7 @@ sudo apt upgrade -y
 
 sudo apt install fcitx5 fcitx5-chinese-addons fcitx5-frontend-gtk3 fcitx5-frontend-gtk4 fcitx5-frontend-qt5 -y
 ```
-安装后在系统的 Language Support 里把键盘输入法系统切换为 fcitx5，重启即可享受丝滑的中文输入。
+安装后在系统的 Language Support 里把键盘输入法系统切换为 fcitx5，重启后，右上角会出现一个键盘图标，点击它选择 Pinyin 即可输入中文。
 
 ## 👁️ 第六阶段：最终 Boss 战 - 编译 OpenEB 事件相机库
 做事件相机绕不开 Prophesee 的 OpenEB。官方文档的自动化脚本由于版本更新经常失效，导致 CMake 各种花式报错。以下是我总结的纯手动填坑版编译流程。
