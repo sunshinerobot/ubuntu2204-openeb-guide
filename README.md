@@ -173,7 +173,7 @@ Mount point: /home
 
 点击 Install Now，设置时区。在填写用户名（Your name / Pick a username）时，强烈建议使用全小写纯英文字母，不要加空格。等待进度条走完重启即可！
 
-## ⚙️ 第五阶段：装机后的“软汉化”与环境配置
+## ⚙️ 第五阶段：装机后的“软汉化”与图形算力环境配置
 保留了全英文系统，但我们需要打字交流。最完美的方案是安装 Fcitx5 中文输入法。
 
 打开终端 (Ctrl+Alt+T)：
@@ -185,11 +185,94 @@ sudo apt update
 
 sudo apt upgrade -y
 
-3. 安装 Fcitx5 拼音输入法
+2. 安装 Fcitx5 拼音输入法
 
 sudo apt install fcitx5 fcitx5-chinese-addons fcitx5-frontend-gtk3 fcitx5-frontend-gtk4 fcitx5-frontend-qt5 -y
 ```
-安装后在系统的 Language Support 里把键盘输入法系统切换为 fcitx5，重启后，右上角会出现一个键盘图标，点击它选择 Pinyin 即可输入中文。
+安装后在系统的 Language Support 里把键盘输入法系统切换为 fcitx5。
+
+重启后（看到这里可以直接跳到5.图形算力配置部分，等待配置完成后一起重启），右上角会出现一个键盘图标，点击它选择 Pinyin 即可输入中文。
+
+
+
+
+3. 安装之后的小插曲
+
+这里有个小插曲，如果重启后没有拼音输入法，则需要手动唤醒Fcitx5。
+
+点击菜单，打开应用搜索框。
+
+输入 fcitx5，如果你看到一个带有键盘图标的应用，点击运行它。
+
+观察屏幕右上角的系统托盘，看看此时有没有出现一个小键盘图标。
+
+即便 Fcitx5 运行了，它默认可能只激活了英文键盘。我们需要手动把拼音拽进去。
+
+点击菜单，搜索并打开 Fcitx5 Configuration (Fcitx5 配置)。
+
+打开的配置界面分为左右两半：左边是“Current Input Method (当前输入法)”，右边是“Available Input Method (可用输入法)”。
+
+核心动作：取消勾选右侧中间的 Only Show Current Language (仅显示当前语言) 这个复选框。（因为我们系统是全英文的，勾选状态下它会把中文输入法藏起来）。
+
+在右侧的搜索框里输入 pinyin。
+
+找到 Pinyin (拼音) 后，双击它，或者选中它后点击中间的向左箭头 <，把它移动到左侧的列表中。
+
+确保现在左侧列表中有 Keyboard - English (US) 和 Pinyin 这两项。点击右下角的 Apply (应用) 然后点击 OK 关闭窗口。
+
+现在，系统终于明白你的需求了。除了点击右上角的键盘图标手动切换外，在 Ubuntu 下最地道、最常用的输入法切换快捷键是：Ctrl + Space (按住 Ctrl 敲击空格) 或者 Ctrl + Shift。
+
+你现在尝试按一下 Ctrl + Space，看看能不能顺利打出中文汉字了？
+
+4.调整候选框大小
+
+当你打出汉字的时候，会发现候选框略小，或许有人会不适应，这里提供一种设置方法。
+
+首先打开配置工具： 点击菜单，搜索并打开 Fcitx5 Configuration (Fcitx5 配置)。
+
+切换到附加组件： 在窗口最上方，点击中间的 Addons (附加组件) 标签页。
+
+定位 UI 设置： 在长长的列表中往下滚动，找到名为 Classic User Interface (经典用户界面) 的选项。
+
+进入高级配置： 点击该选项最右侧的 齿轮图标 ⚙️ (配置)。
+
+调大字体字号 (核心步骤)：
+
+在弹出的新窗口中，你会看到 Font (字体) 和 Menu Font (菜单字体) 两个选项。
+
+点击它们右侧当前的字体名称按钮（默认通常显示类似 Sans 10）。
+
+在弹出的字体选择器中，找到底部的 Size (大小) 选项。将数字果断改大，比如从 10 直接修改为 24 或 26。
+
+点击 Select (选择) 确认修改。
+
+应用并保存： 点击右下角的 Apply (应用)，然后点击 OK 关闭所有窗口。
+
+现在，你随便找个可以输入文字的地方（比如打开终端或者浏览器地址栏），按 Ctrl + Space 切换出拼音打几个字试试。因为字体变大了，整个候选框也会被自动撑大，是不是瞬间变得非常清晰舒服了？
+
+5.图形算力配置
+
+事件相机产生的大量异步像素数据，都极度依赖 GPU 算力。Ubuntu 开源的 Nouveau 驱动性能极差，必须安装 NVIDIA 官方闭源驱动。
+
+自动检测推荐驱动：
+
+在终端输入以下命令，系统会列出适合你显卡的驱动版本：
+
+```bash
+ubuntu-drivers devices
+```
+安装推荐版本：
+
+在输出的信息中，找到带有 recommended 字样的那一行（通常是 nvidia-driver-535 或更高版本）。然后输入：
+
+```bash
+sudo apt install nvidia-driver-535 -y
+(注意：将 535 替换为你终端里显示的 recommended 版本号)
+```
+
+验证安装：
+
+重启电脑后，打开终端输入 nvidia-smi。如果出现一个包含 GPU 温度、显存使用率的完整表格，说明显卡驱动安装完美成功。
 
 ## 👁️ 第六阶段：最终 Boss 战 - 编译 OpenEB 事件相机库
 做事件相机绕不开 Prophesee 的 OpenEB。官方文档的自动化脚本由于版本更新经常失效，导致 CMake 各种花式报错。以下是我总结的纯手动填坑版编译流程。
@@ -210,7 +293,6 @@ sudo apt install libprotobuf-dev protobuf-compiler -y
 2. 克隆源码与编译
 ```bash
 克隆仓库
-
 
 git clone https://github.com/prophesee-ai/openeb.git
 
