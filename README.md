@@ -17,6 +17,27 @@
 
 操作: 将其关闭并等待解密完成。如果带着加密状态安装 Linux，可能会导致重启后 Windows 需要输入冗长的恢复密钥，甚至导致 Ubuntu 无法正确挂载和读取硬盘分区。
 
+在Win11 25H2版本中，是没有设备加密这个选项的，这个时候需要通过命令行关闭。
+
+右键点击底部任务栏的“开始”按钮（或者按 Win + X），选择 终端 (管理员) 或 Windows PowerShell (管理员)。
+
+输入:
+```bash
+manage-bde -off C:
+```
+系统会在后台开始解密。
+
+完成之后为了确保设备安全，再次输入以下命令：
+
+```bash
+manage-bde -status C:
+```
+在弹出的信息中，只要看到以下两行，就说明你的磁盘已经彻底解密了：
+
+转换状态 (Conversion Status): 完全解密 (Fully Decrypted)
+
+保护状态 (Protection Status): 保护关闭 (Protection Off)
+
 关闭快速启动 (Fast Startup):
 
 路径: 控制面板 -> 硬件和声音 -> 电源选项 -> 选择电源按钮的功能。
